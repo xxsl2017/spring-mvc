@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.test.service.MiguMobileService;
 
+
 @RestController
 public class MiguMobileSegController {
 
