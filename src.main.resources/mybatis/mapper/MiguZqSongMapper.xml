@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.MiguZqSongDao">
+
+	<resultMap id="MiguZqSong" type="com.test.po.MiguZqSong">
+		<id column="SONG_ID" property="songId" jdbcType="VARCHAR" />
+		<result column="SONG_NAME" property="songName" jdbcType="VARCHAR" />
+		<result column="SONG_LANGUAGE" property="songLanguage"
+			jdbcType="VARCHAR" />
+		<result column="SONG_IMAGE" property="songImage" jdbcType="VARCHAR" />
+		<result column="SONG_PATH" property="songPath" jdbcType="VARCHAR" />
+		<result column="SINGER_NAME" property="singerName" jdbcType="VARCHAR" />
+		<result column="SINGER_IMAGE" property="singerImage" jdbcType="VARCHAR" />
+		<result column="PHONE_NUMBER" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="SEX" property="sex" jdbcType="VARCHAR" />
+		<result column="ALBUM_NAME" property="albumName" jdbcType="VARCHAR" />
+		<result column="LYRIC_PATH" property="lyricPath" jdbcType="VARCHAR" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="STATUS" property="status" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<select id="selectSongById" parameterType="String" resultType="int">
+		select count(1) from migu_zq_song where song_id=#{songId}
+	</select>
+
+	<insert id="saveSong" parameterType="com.test.po.MiguZqSong">
+		<selectKey keyProperty="song.songId" resultType="string"
+			order="BEFORE">
+			select seq_migu_zq_song.nextval from dual
+		</selectKey>
+		insert into
+		migu_zq_song(SONG_ID,SONG_NAME,SONG_LANGUAGE,SONG_IMAGE,SONG_PATH,
+		SINGER_NAME,SINGER_IMAGE,PHONE_NUMBER,EMAIL,SEX,ALBUM_NAME,LYRIC_PATH,USER_ID,CREATE_TIME,UPDATE_TIME)
+		values (#{song.songId,jdbcType=VARCHAR},
+		#{song.songName,jdbcType=VARCHAR},
+		#{song.songLanguage,jdbcType=VARCHAR},
+		#{song.songImage,jdbcType=VARCHAR},
+		#{song.songPath,jdbcType=VARCHAR},
+		#{song.singerName,jdbcType=VARCHAR},
+		#{song.singerImage,jdbcType=VARCHAR},
+		#{song.phoneNumber,jdbcType=VARCHAR},
+		#{song.email,jdbcType=VARCHAR},
+		#{song.sex,jdbcType=VARCHAR},
+		#{song.albumName,jdbcType=VARCHAR},
+		#{song.lyricPath,jdbcType=VARCHAR},
+		#{song.userId,jdbcType=VARCHAR},
+		#{song.createTime,jdbcType=TIMESTAMP},
+		#{song.updateTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<delete id="deleteSong" parameterType="String">
+		delete from migu_zq_song
+		where song_id=#{songId}
+	</delete>
+
+</mapper>

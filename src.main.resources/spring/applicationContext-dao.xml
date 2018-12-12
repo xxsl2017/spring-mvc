@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<context:component-scan base-package="com.test.dao" />
+
+	<!-- 加载配置文件 -->
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath:db.properties" />
+
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="slowSqlMillis" value="2000" />
+		<property name="logSlowSql" value="true" />
+	</bean>
+
+	<!-- 数据源 -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="minIdle" value="5" />
+		<property name="maxActive" value="100" />
+		<property name="testWhileIdle" value="true" />
+		<property name="loginTimeout" value="5000" />
+		<property name="accessToUnderlyingConnectionAllowed" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="200" />
+		<property name="maxWaitThreadCount" value="800" />
+		<property name="initialSize" value="10" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!-- mapper配置 -->
+	<!-- 让spring管理sqlsessionfactory 使用mybatis和spring整合包中的 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+	</bean>
+
+	<!-- 配置Mapper扫描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.test.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+
+	<!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"> 
+		<constructor-arg ref="dataSource" /> </bean> <bean id="namedParameterJdbcTemplate" 
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"> 
+		<constructor-arg ref="dataSource" /> </bean> -->
+</beans>

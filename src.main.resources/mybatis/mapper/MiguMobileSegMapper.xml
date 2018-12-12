@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.MiguMobileSegDao">
+
+	<resultMap id="MiguMobileSeg" type="com.test.po.MiguMobileSeg">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="PROVINCE" property="province" jdbcType="VARCHAR" />
+		<result column="CITY" property="city" jdbcType="VARCHAR" />
+		<result column="CODE" property="code" jdbcType="DECIMAL" />
+		<result column="SEG" property="seg" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<select id="select" parameterType="String" resultMap="MiguMobileSeg">
+		select id,province,city,code,seg from migu_mobile_seg m where m.seg = #{seg}
+	</select>
+
+	<insert id="insert" parameterType="Object">
+		insert into
+		migu_mobile_seg(id,province,city,code,seg)
+		values
+		(seq_migu_mobile_seg.nextval, #{province},#{city},
+		#{code},#{seg})
+	</insert>
+	
+	<update id="update" parameterType="Object">
+	update migu_mobile_seg set province=#{province},city=#{city},code=#{code} where seg=#{seg}
+	</update>
+
+</mapper>
